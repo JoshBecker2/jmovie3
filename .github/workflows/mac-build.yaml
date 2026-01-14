@@ -1,0 +1,26 @@
+name: Build for Mac
+on: push
+
+jobs:
+  build_mac:
+    runs-on: macos-latest # This runs your code on a Mac in the cloud
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build DMG for Apple Silicon
+        run: npm run make -- --arch=arm64
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mac-Apple-Silicon-App
+          path: out/make/**/*.dmg

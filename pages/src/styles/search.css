@@ -1,0 +1,41 @@
+#header.result {
+    position: relative;
+    text-align: center;
+    top: 20px;
+    left: 0px;
+    width: 100%;
+
+    h1 {
+        font-size: 50px;
+    }
+
+    h2 {
+        margin-bottom: 100px;
+        font-size: 30px;
+    }
+
+}
+
+#searchBar.result {
+    position: relative;
+    top: -20px;
+    height: 40px;
+}
+
+#resultContainer, #resultHeader {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+
+#resultContainer {
+    width: 90%;
+    left: 5%;
+    display: grid;
+    grid-template-columns: auto auto auto auto; 
+    margin-top: 50px;
+}
+
+#whiteoutContainer h2 {
+    margin-top: 10%;
+}

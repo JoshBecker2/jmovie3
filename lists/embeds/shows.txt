@@ -1,0 +1,6 @@
+VidFast,https://vidfast.pro/tv/<TMDB>/<S>/<E>?autoPlay=true
+VidLink,https://vidlink.pro/tv/<TMDB>/<S>/<E>
+VidSrc,https://vidsrc-embed.ru/embed/tv?tmdb=<TMDB>&season=<S>&episode=<E>
+MultiEmbed,https://multiembed.mov/?video_id=<TMDB>&tmdb=1&s=<S>&e=<E>
+BidSrc,https://shetsharon.vercel.app/tv/<TMDB>/<S>/<E>?color=ffffff
+Live TV/Sports,https://streamed.pk/

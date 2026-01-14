@@ -1,0 +1,4 @@
+VidFast,https://vidfast.pro/movie/<TMDB>?autoPlay=true
+VidLink,https://vidlink.pro/movie/<TMDB>
+VidSrc,https://vidsrc-embed.ru/embed/movie?tmdb=<TMDB>
+MultiEmbed,https://multiembed.mov/?video_id=<TMDB>&tmdb=1

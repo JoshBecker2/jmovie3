@@ -1,0 +1,4 @@
+.mov
+##REQUIRED FOR MANY PLAYERS DONT REMOVE##
+ajax.googleapis.com
+imasdk.googleapis.com

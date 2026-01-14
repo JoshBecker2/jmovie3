@@ -1,0 +1,52 @@
+#header.home {
+    position: relative;
+    text-align: center;
+    top: 20px;
+    left: 0px;
+    width: auto;
+
+    h1 {
+        font-size: 50px;
+    }
+
+    h2 {
+        font-size: 25px;
+    }
+
+}
+
+#searchContainer.home {
+    text-align: center;
+    margin-top: 80px;
+}
+
+#searchBar.home {
+    position: relative;
+    margin-top: 10px;
+    height: 40px;
+}
+
+#mostViewedDisplay {
+    background: none;
+    font-family: 'Raleway', sans-serif;
+    color: var(--text);
+    font-size: 20px;
+    outline: none !important;
+    border: none;
+}
+
+#recentlyViewed {
+    position: relative;
+    text-align: center;
+    width: 100%;
+    margin-top: 70px;
+
+    #recentlyViewedResults {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+    }
+}
+
+#recentlyViewed h2 {
+    margin-bottom: 50px;
+}

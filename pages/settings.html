@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Settings</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="./src/styles/global.css">
+	<link rel="stylesheet" type="text/css" href="./src/styles/settings.css">    
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Oxygen&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Ubuntu&display=swap" rel="stylesheet">
+</head>
+ <body>
+	<!-- fade-in effect on page load -->
+	<div id="whiteoutContainer"></div>
+
+    <!-- custom popup placeholder -->
+	<div id="jMovieAlert">
+		<div id="jMovieMessage">
+			<h2 id="messageTitle"></h2>
+			<h3 id="messageBody"></h3>
+			<button id="messageClose" class="jMovieButton" onclick="closeAlert()">Close</button>
+		</div>
+	</div>
+
+	<!-- top of page -->
+	<div id="header" class="settings">
+		<h1><b style="color: var(--accent);">j</b>movie</h1>
+        <h2>Settings & Customization | <button class="jMovieButton" onclick="openReadMe()">View README</button></h2>
+    </div>
+	
+	<!-- tool buttons -->
+	<button id="exitButton" class="jMovieButton" onclick="window.jm.closeApp()">Exit</button>
+	<button id="homeButton" class="jMovieButton" onclick="location.href='index.html'">Home</button>
+    <button id="infoButton" class="jMovieButton" onclick="openLogs()">Open Logs</button>
+
+    <!-- main container to hold all of the settings -->
+    <div id="settingsContainer">
+        <button id="saveSettingsBtn" class="jMovieButton" onclick="saveSettings()">Save Changes</button>
+        <button id="resetSettingsBtn" class="jMovieButton" onclick="resetSettings()">Reset Settings</button>
+        <div id="themeSettings">
+            <h2 class="textHighlight2">Theme:</h2>
+            <h3>Save changes to see the effect take place</h3>
+            <div class="inputContainer">
+                <span class="row">
+                    <h3>Main Background:</h3>
+                    <input class="jMovieInput" id="theme-bg" placeholder="#171717" maxlength="7">
+                    <div class="color" id="display-bg"></div>
+                </span>
+                <span class="row">
+                    <h3>Secondary Background:</h3>
+                    <input class="jMovieInput" id="theme-bg2" placeholder="#444444" maxlength="7">
+                    <div class="color" id="display-bg2"></div>
+                </span>
+                <span class="row">
+                    <h3>Accent:</h3>
+                    <input class="jMovieInput" id="theme-accent" placeholder="#DA0037" maxlength="7">
+                    <div class="color" id="display-accent"></div>
+                </span>
+                <span class="row">
+                    <h3>Text:</h3>
+                    <input class="jMovieInput" id="theme-text" placeholder="#EDEDED" maxlength="7">
+                    <div class="color" id="display-text"></div>
+                </span>
+            </div>
+            <script type="text/javascript">
+
+                // sanitize the hex input from the user
+                function validateInput (e) {
+                    // ensure there is a '#' at the start of the string
+                    let input = e.target.value;
+                    if (!input.startsWith('#')) {
+                        input = `#${input}`;
+                        e.target.value = input;
+                    }
+
+                    // make sure the text is caps
+                    input = input.toUpperCase();
+                    
+                    // return cleaned output
+                    return input;
+                }
+
+                // color changer function & force caps on input change
+                document.getElementById("theme-bg").addEventListener("keyup", (e) => {
+                    // sanitize input
+                    e.target.value = validateInput(e);
+
+                    // change the background color of the div to match the input
+                    document.getElementById("display-bg").style.backgroundColor = e.target.value;
+                });
+
+                // repeat for remaining inputs...
+                document.getElementById("theme-bg2").addEventListener("keyup", (e) => {
+                    e.target.value = validateInput(e);
+                    document.getElementById("display-bg2").style.backgroundColor = e.target.value;
+                });
+
+                document.getElementById("theme-accent").addEventListener("keyup", (e) => {
+                    e.target.value = validateInput(e);
+                    document.getElementById("display-accent").style.backgroundColor = e.target.value;
+                });
+
+                document.getElementById("theme-text").addEventListener("keyup", (e) => {
+                    e.target.value = validateInput(e);
+                    document.getElementById("display-text").style.backgroundColor = e.target.value;
+                });
+            </script>
+        </div>
+        <div id="keyboardSettings">
+            <h2 class="textHighlight2">Keyboard Shortcuts:</h2>
+            <h3>Press the input and then type the key you want to use.
+                Example: S = Shift + S | h = H | Escape = ESC
+                <br>Click off the input to deselect. 
+            </h3>
+            <div class="inputContainer">
+                <span class="row">
+                    <h3>Help:</h3>
+                    <input id="help" class="jMovieInput" placeholder="h">
+                </span>
+                <span class="row">
+                    <h3>Enter Full Screen:</h3>
+                    <input id="enterFS" class="jMovieInput" placeholder="f">
+                </span>
+                <span class="row">
+                    <h3>Exit Full Screen:</h3>
+                    <input id="exitFS" class="jMovieInput" placeholder="Escape">
+                </span>
+                <span class="row">
+                    <h3>Search:</h3>
+                    <input id="search" class="jMovieInput" placeholder="S">
+                </span>
+                <span class="row">
+                    <h3>Return Home:</h3>
+                    <input id="returnHome" class="jMovieInput" placeholder="H">
+                </span>
+                <span class="row">
+                    <h3>Exit App:</h3>
+                    <input id="exitApp" class="jMovieInput" placeholder="W">
+                </span>
+                <span class="row">
+                    <h3>Open Logs:</h3>
+                    <input id="openLogs" class="jMovieInput" placeholder="L">
+                </span>
+                <span class="row">
+                    <h3>Window Refresh:</h3>
+                    <input id="openLogs" class="jMovieInput" 
+                    style="border-bottom: 4px solid white" value="Ctrl+R" disabled title="(Control + R) Use this command to refresh the page if it is unable to be reloaded. Binding is unchangeable as a safety fallback by the browser.">
+                </span>
+            </div>
+            <script type="text/javascript">
+                // update input values with keypress
+                document.getElementById("keyboardSettings").addEventListener("keydown", (e) => {
+                    e.preventDefault();
+                    
+                    // check if key is already in use
+                    const inputs = document.getElementById("keyboardSettings").querySelectorAll("input");
+                    let used;
+                    inputs.forEach(i => {
+                        if (i.value === e.key) used = true;
+                    });
+
+                    if (!used)
+                        document.activeElement.value = e.key;
+                });
+
+
+            </script>
+        </div>
+        <div id="listSettings">
+            <span style="display: inline-flex;">
+                <h2 class="textHighlight2" style="margin-right: 15px;">Filter Lists:</h2>
+                <button id="uploadListBtn" onclick="uploadList()" class="jMovieButton" style="height: 30px; margin-top: 20px">Upload List</button> 
+            </span>
+            <h3 style="position:relative;top:-20px;margin-bottom:-10px;">Use the selected lists for the web filter:</h3>
+            <div id="filterListContainer">
+                <script type="text/javascript">
+                    // upload a new blacklist to the file system
+                    async function uploadList() {
+                        const [fileHandle] = await window.showOpenFilePicker();
+                        const file = await fileHandle.getFile();
+
+                        try {
+                            // convert file to buffer
+                            const arrayBuffer = await file.arrayBuffer();
+                            const uint8Array = new Uint8Array(arrayBuffer);
+
+                            // send data to backend and wait for response
+                            const responseMessage = await window.jm.uploadFileToApp(file.name, uint8Array);
+                            if (responseMessage == "ERROR") throw new Error("Unable to upload file");
+                            else loadBlackLists();
+                        } catch (error) {
+                            openAlert("File Upload Error", "Unable to save file: " + error);
+                        }
+
+
+                    }
+
+                    // load all files from blacklist folder
+                    async function loadBlackLists() {
+                        const allLists = await window.jm.loadBlackLists();
+                        const used = JSON.parse(await window.jm.fetchConfig()).filterList;
+                        const container = document.getElementById("filterListContainer");
+                        container.innerHTML = "";
+
+                        allLists.forEach(i => {
+                            id = i.replace(".txt", "");
+                            span =
+                                `
+                                    <span class="list filterListItem"> 
+                                        <h3>${i}</h3> 
+                                `;
+                            if (used.some(j=> i==j)) { // if list is used then check the box 
+                                span += 
+                                    `
+                                            <input type="checkbox" class="jMovieInput" id="chkbx-${id}" checked>
+                                        </span>                                
+                                    `;
+                            } else {
+                                span += 
+                                    `
+                                            <input type="checkbox" class="jMovieInput" id="chkbx-${id}">
+                                        </span>                                
+                                    `;
+                            }
+                            container.innerHTML += span;
+
+                        })
+
+                    }
+                    loadBlackLists();
+                </script>  
+            </div>
+            <h3>Whitelist: Add URLs to allow them through the filter</h3>
+            <textarea id="whitelist" style="width: 350px;height:175px;"></textarea>
+            <h2 class="textHighlight2">Player Sources:</h2>
+            <h3>Edit the source files here, see README for details</h3>
+            <span class="col">
+                <h3>Movie Sources:</h3>
+                <textarea id="movieEmbedList" ></textarea>
+            </span>
+            <span class="col">
+                <h3>Show Sources:</h3>
+                <textarea id="showEmbedList"></textarea>
+            </span>
+            <script type="text/javascript">
+                // load movie & show embed lists
+                const movieEmbed = document.getElementById("movieEmbedList");
+                const showEmbed = document.getElementById("showEmbedList");
+                
+                window.jm.loadFileContent("embeds/movies.txt").then(data => {
+                    if (data == "ERROR") throw new Error();
+                    movieEmbed.value = data;
+                }).catch(err => { // log in backend and display message in textarea
+                    window.jm.addLog("[JMovie Backend] Error loading file: " + err);
+                    movieEmbed.value = "Unable to load file content: " + err;
+                });
+
+                window.jm.loadFileContent("embeds/shows.txt").then(data => {
+                    showEmbed.value = data;
+                }).catch(err => { // log in backend and display message in textarea
+                    window.jm.addLog("[JMovie Backend] Error loading file: " + err);
+                    showEmbed.value = "Unable to load file content: " + err;
+                });
+
+                // load whitelist textarea
+                const whiteList = document.getElementById("whitelist");
+
+                window.jm.loadFileContent("whitelist.txt").then(data => {
+                    whiteList.value = data;
+                }).catch(err => { // log in backend and display message in textarea
+                    window.jm.addLog("[JMovie Backend] Error loading file: " + err);
+                    whiteList.value = "Unable to load file content: " + err;
+                });
+
+
+            </script>
+        </div>
+        <div id="experimentalPlayer">
+            <h2>Experimental Player:</h2>
+            <h3>Find new player sources safely</h3>
+            <iframe id="experimentalFrame" src=""
+            width="530px"
+            height="350px"
+            style="z-index: 1;"></iframe>
+            <br>
+            <input id="frameSrc" onkeyup="loadExpFrame()" class="jMovieInput" type="text" placeholder="Enter URL (Auto Load)">
+            <h3>Use this player and dev tools (Ctrl+Shift+I) to find new sources</h3>
+            <h3>Check out: fmhy.net to get started</h3>
+            <script type="text/javascript">
+                function loadExpFrame() {
+                    document.getElementById("experimentalFrame").src=document.getElementById("frameSrc").value;
+                }
+            </script>
+        </div>
+    </div>
+    <script type="text/javascript" src="./src/scripts/helper.js"></script>
+	<script type="text/javascript">
+
+		let userConfig;
+	
+		document.addEventListener("DOMContentLoaded", () => {		
+			window.jm.clearLogs();
+
+            // get config from file system:
+			const initConfig = window.jm.fetchConfig().then(config => {
+				userConfig = JSON.parse(config);
+
+				const kbs = userConfig["keybindings"];
+
+				const keys  = Object.values(kbs);
+
+				// load keybindings into inputs:
+                document.getElementById("help").value = keys[0];
+                document.getElementById("enterFS").value = keys[1];
+                document.getElementById("exitFS").value = keys[2];
+                document.getElementById("search").value = keys[3];
+                document.getElementById("returnHome").value = keys[4];
+                document.getElementById("exitApp").value = keys[5];
+                document.getElementById("openLogs").value = keys[6];                
+				
+                // update CSS variables and load into inputs
+				const theme = userConfig["theme"];
+
+				const root = document.documentElement;
+				root.style.setProperty('--accent', theme["accent"]);
+				root.style.setProperty('--text', theme["text"]);
+				root.style.setProperty('--bg', theme["bg"]);
+				root.style.setProperty('--bg2', theme["bg2"]);
+
+                document.getElementById("theme-bg").value = theme["bg"];
+                document.getElementById("theme-bg2").value = theme["bg2"];
+                document.getElementById("theme-accent").value = theme["accent"];
+                document.getElementById("theme-text").value = theme["text"];
+
+                document.getElementById("display-bg").style.backgroundColor = theme["bg"];
+                document.getElementById("display-bg2").style.backgroundColor = theme["bg2"];
+                document.getElementById("display-accent").style.backgroundColor = theme["accent"];
+                document.getElementById("display-text").style.backgroundColor = theme["text"];
+			
+            })
+			.catch(err => {
+				console.error(err);
+			});
+
+			// show content once it has finished loading
+			fadeLoader(500);
+
+		});
+		
+		// Helper functions:
+		async function openReadMe() {
+			messageTitle = "JMovie Important Information (README.md)";
+			let messageBody = await window.jm.loadFileContent("README.md");
+			openAlert(messageTitle, messageBody);
+		}
+
+        async function saveSettings() {
+            try {
+                config = userConfig;
+
+                // save colors
+                config["theme"]["bg"] = document.getElementById("theme-bg").value;
+                config["theme"]["bg2"] = document.getElementById("theme-bg2").value;
+                config["theme"]["accent"] = document.getElementById("theme-accent").value;
+                config["theme"]["text"] = document.getElementById("theme-text").value;
+
+                // save keybindings
+                config["keybindings"]["Help"] = document.getElementById("help").value;
+                config["keybindings"]["Enter Full Screen"] = document.getElementById("enterFS").value;
+                config["keybindings"]["Exit Full Screen"] = document.getElementById("exitFS").value;
+                config["keybindings"]["Search"] = document.getElementById("search").value;
+                config["keybindings"]["Return Home"] = document.getElementById("returnHome").value;
+                config["keybindings"]["Exit App"] = document.getElementById("exitApp").value;
+                config["keybindings"]["Open Logs"] = document.getElementById("openLogs").value;                
+
+                // write embed & white lists back to fs
+                await window.jm.writeFileContent("/embeds/movies.txt", document.getElementById("movieEmbedList").value)
+                await window.jm.writeFileContent("/embeds/shows.txt", document.getElementById("showEmbedList").value)
+                await window.jm.writeFileContent("/whitelist.txt", document.getElementById("whitelist").value)
+                
+                // find all checked blacklists and update config variable
+                let used = [];
+                document.querySelectorAll("input[type='checkbox']").forEach(box => {
+                    if (box.checked) used.push(box.id.replace("chkbx-","") + ".txt");
+                })
+
+                config["filterList"] = used;
+                
+                // write back to fs
+                await window.jm.saveSettings(JSON.stringify(config));
+                window.location.reload();
+                
+            } catch (err) {
+                openAlert("Unable to Save",
+                    "Error saving settings: " + err);
+            }
+        }
+
+        async function resetSettings() {
+            await window.jm.resetSettings();
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.reload();
+        }
+
+    </script>
+</body>
+</html>

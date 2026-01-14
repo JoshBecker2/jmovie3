@@ -1,0 +1,248 @@
+<html>
+    <head>
+        <title>JMOVIE4</title>
+        <link href="style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+    <div id="container">
+        <!-- ib 16869 -->
+        <!-- the gentlemen 522627 -->
+        <!-- the simpsons 456 -->
+        <iframe id="player" src=""
+            width="530px"
+            height="350px"
+            style="z-index: 1;"></iframe>
+
+    </div>
+
+    <div id="controls" style="margin-top: 400px;">
+        <select id="embedSrc" onchange="loadFrameSource()">
+        </select>
+        <select id="filter" onchange="changeFilterStrength()">
+            <option value="off">Off</option>
+            <option value="on">On</option>
+            <option value="custom">Custom</option>
+        </select>
+        <input id="search" value="Shift+S to select all of text">
+    </div>
+
+    <!-- prettify and move to the right side -->
+    <div id="kbs"></div>
+    <div id="logs"></div>
+
+    <!-- hidden alert box for user messages -->
+    <div id="jMovieAlert">
+        <h2 id="messageTitle"></h2>
+        <h3 id="messageBody"></h3>
+        <button onclick="closeAlert()">Close</button>
+    </div>
+
+    <script>
+        
+    const params = new URLSearchParams(location.href.search);
+    params.set("id", "16869");
+    // params.set("s", "1");
+    // params.set("e", "1");
+
+    // load list of embed sources from file system and parse their tmdb
+    async function getEmbedList(isShow) {
+        const urls = await window.jm.getEmbedURLs(isShow);
+        const dropdown = document.getElementById('embedSrc');
+
+        // nodes = await window.jm.tmdbSearch("the+simpsons", true)
+
+
+
+        urls.forEach(item => {
+            const title = item.split(",")[0];
+            let url = item.split(",")[1];
+
+            // URL query replacement 
+            url = url.replace("<TMDB>", params.get("id"));
+            if (params.get("e")) {
+                url = url.replace("<E>", params.get("e"));
+                url = url.replace("<S>", params.get("s"));
+            }
+
+            // append every option to dropdown menu
+            const option = document.createElement('option');
+            option.textContent = title;
+            option.value = url;
+
+            dropdown.appendChild(option);
+        });
+
+        // load source into iframe
+        loadFrameSource();
+
+        // load filter strength 
+
+        // load configuration file
+        const config = JSON.parse(await window.jm.fetchConfig());
+        console.log(config)
+
+        // load filter settings into dom
+        document.getElementById("filter").value = config["filterStrength"];
+
+    }
+
+    // get value from dropdown update filter level on backend
+    // reload page when done
+    async function changeFilterStrength() {
+        strength = document.getElementById("filter").value;
+
+        // call IPC function
+        const status = await window.jm.updateFilter(strength);
+        if (status === "OK")
+            location.reload();
+        else
+        alert("Error changing filter strength!");
+    }
+
+    // add event listener to page onload
+    document.addEventListener('DOMContentLoaded', () => {
+        // load the embed list from fs based on query params
+        if (params.get("e") == undefined) getEmbedList(false); else getEmbedList(true);
+                
+            // load keybindings from backend 
+            const loadKbs = window.jm.fetchConfig().then(data => {
+                const kbs = JSON.parse(data)["keybindings"];
+
+                const keys  = Object.values(kbs);
+
+                window.addEventListener('keydown', (event) => {
+                    if (!keys.includes(event.key)) return; // only activate for shortcuts
+                    
+                    const typing = (document.activeElement == document.getElementById("search")) 
+                    if (typing) return; // don't activate when typing 
+                    
+                    event.preventDefault();
+                    switch (event.key) {
+                        case keys[0]: // help
+                            helpMsg = `
+                            More Shortcuts: (Case Sensitive)
+                                - Search: "S"
+                                - Home: "H"
+                                - Exit App: "W"
+                                - Display Logs: "L"
+                                - Display Keybinds: "K"
+                                - Show Full Tutorial: "T"
+                        
+                            Player issues: 
+                                - Clicking on the video a bunch usually gets it to work (invisible ad-wall still exists but is ineffective)
+                                - Change source to different player or
+                                - Turn down filter strength to improve performance
+                                - Enter full screen if video buttons don't work (press "${keys[2]}")
+                            `;
+                            openAlert("JMovie Quick Help", 
+                            helpMsg);
+                            break;
+                        case keys[1]: // enter fs
+                            enterFullScreen(keys[2]);
+                            break;
+                        case keys[2]: // exit fs or alert if it is there
+                            exitFullScreen();
+                            closeAlert();
+                            break;
+                        case keys[3]: // search
+                            focusSearchBar();
+                            break;
+                        case keys[4]: // return home
+                            returnHome();
+                            break;
+                        case keys[5]: // exit app
+                            window.jm.closeApp();
+                            break;
+                        case keys[6]: // open logs
+                            openLogs();
+                            break;
+                        case keys[7]: // open kbs
+                            openKbs();
+                            break;
+                        case keys[8]: // show tut
+                            break;
+                        default:
+                            break;
+                    }
+                })
+                
+                // display keybindings on front end #kbs 
+                for ([key, val] of Object.entries(kbs))
+                    document.getElementById("kbs").innerText += key + " " + val + "\n";
+
+            }).catch(err => console.error(err));
+                    
+        });
+
+
+    // Helper functions:
+
+    // update iframe source from dropdown menu value
+    function loadFrameSource() {
+        const select = document.getElementById("embedSrc");
+        const frame = document.getElementById("player");
+        frame.src = select.value;
+    }
+
+    function enterFullScreen() {
+        const playerIframe = document.getElementById('player');
+        if (playerIframe.requestFullscreen) {
+            playerIframe.requestFullscreen();
+        } else if (playerIframe.mozRequestFullScreen) {
+            playerIframe.mozRequestFullScreen();
+        } else if (playerIframe.webkitRequestFullscreen) {
+            playerIframe.webkitRequestFullscreen();
+        }
+    }
+
+    function exitFullScreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    }
+
+    function focusSearchBar() {
+        document.getElementById("search").focus();
+        document.getElementById("search").select();
+    }
+
+    function loadLogs() {
+        // prettify output and remove the first one with nothing in final cut
+        document.getElementById("logs").innerText = "";
+        const logs = window.jm.fetchLogs().then(logs => {
+            logs.forEach(log => {
+                document.getElementById("logs").innerText += log + "\n";
+            });
+        }).catch(err => { console.error(err); });
+    }
+
+    function openLogs() {
+        loadLogs();
+        document.getElementById("kbs").style.visibility = "hidden";
+        document.getElementById("logs").style.visibility = "visible";
+    }
+    
+    function openKbs() {
+        document.getElementById("kbs").style.visibility = "visible";
+        document.getElementById("logs").style.visibility = "hidden";
+    }
+
+    function openAlert(messageTitle, messageBody) {
+        const jmAlert = document.getElementById("jMovieAlert");
+        // bring into view
+        jmAlert.classList.add("active");
+        document.getElementById("messageTitle").innerText = messageTitle;
+        document.getElementById("messageBody").innerText = messageBody;
+    }
+
+    function closeAlert() {
+        document.getElementById("jMovieAlert").classList.remove("active");
+    }
+
+    </script>
+</body>
+</html>

@@ -23,4 +23,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Mac-Apple-Silicon-App
-          path: out/make/**/*.dmg
+          # We use a broader path to find the file regardless of subfolders
+          path: out/**/*.dmg 
+          if-no-files-found: error

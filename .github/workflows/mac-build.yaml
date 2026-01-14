@@ -24,5 +24,5 @@ jobs:
         with:
           name: Mac-Apple-Silicon-App
           # We use a broader path to find the file regardless of subfolders
-          path: out/**/*.dmg 
+          path: /Users/runner/work/jmovie3/jmovie3/out/**/*.dmg
           if-no-files-found: error

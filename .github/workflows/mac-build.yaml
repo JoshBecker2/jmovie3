@@ -16,8 +16,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build DMG for Apple Silicon
-        run: npm run make -- --arch=arm64 --platform=darwin
+      - name: Build DMG for Apple x64
+        run: npm run make -- --arch=x64 --targets @electron-forge/maker-zip
 
       - name: List files (Debug)
         run: ls -R out/
@@ -25,9 +25,9 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Mac-Apple-Silicon-App
+          name: Mac-App-x64
           # We use a broader path to find the file regardless of subfolders
-          path: /Users/runner/work/jmovie3/jmovie3/out/**/*.dmg
+          path: out/make/**/*.zip
           if-no-files-found: error
 
 

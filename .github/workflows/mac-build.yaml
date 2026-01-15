@@ -17,7 +17,10 @@ jobs:
         run: npm install
 
       - name: Build DMG for Apple Silicon
-        run: npm run make -- --arch=arm64
+        run: npm run make -- --arch=arm64 --platform=darwin
+
+      - name: List files (Debug)
+        run: ls -R out/
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -26,3 +29,8 @@ jobs:
           # We use a broader path to find the file regardless of subfolders
           path: /Users/runner/work/jmovie3/jmovie3/out/**/*.dmg
           if-no-files-found: error
+
+
+
+
+          

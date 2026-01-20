@@ -1,9 +1,9 @@
-name: Build for Mac
+name: Build for Mac x64 & ARM
 on: push
 
 jobs:
-  build_mac:
-    runs-on: macos-latest # This runs your code on a Mac in the cloud
+  build_mac_64:
+    runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -16,21 +16,42 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build DMG for Apple x64
+      - name: Build ZIP for Apple x64
         run: npm run make -- --arch=x64 --targets @electron-forge/maker-zip
 
-      - name: List files (Debug)
-        run: ls -R out/
+      # - name: List files (Debug)
+      #   run: ls -R out/
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Mac-App-x64
-          # We use a broader path to find the file regardless of subfolders
           path: out/make/**/*.zip
           if-no-files-found: error
 
+  build_mac_arm:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
+      - name: Install dependencies
+        run: npm install
 
-          
+      - name: Build DMG for Apple ARM
+        run: npm run make -- --arch=arm --targets @electron-forge/maker-dmg
+
+      # - name: List files (Debug)
+      #   run: ls -R out/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mac-App-ARM
+          path: out/make/**/*.dmg
+          if-no-files-found: error

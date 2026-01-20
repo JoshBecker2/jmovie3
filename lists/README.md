@@ -84,10 +84,14 @@ an endpoint which accepts TMDB IDs. Ensure that you use the <> notation.
 Also, each entry has both a name (whatever you want) and a URL
 that is separated by a comma (see current output for examples).
 <br>
-https://www.reddit.com/r/Piracy/comments/1cgxk9s/<br>how_easy_to_create_a_video_streaming_site_like/
+https://www.reddit.com/r/Piracy/comments/1cgxk9s/how_easy_to_create_a_video_streaming_site_like/
 <br>
 In addition, you can use the player at the bottom to safely 
-find new sources using the Dev Tools and JMovie's adblock.
+find new sources using the Dev Tools and JMovie's adblock. 
+To remove a list, navigate to the user data folder on your 
+computer and remove the text file from the folder. Ensure it 
+is not selected in your current configuration before 
+removing.
 
 <h3>Keyboard Shortcuts</h3>
 If the shortcuts are not working, make sure you are not selecting 

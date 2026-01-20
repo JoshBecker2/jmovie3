@@ -306,7 +306,6 @@ ipcMain.handle('tmdbSearch', async (event, q) => {
 // resets the scraper window from the front end when an error happens
 ipcMain.handle('resetSearch', async (event) => {
     try {
-        // TODO: IMPLEMENT ERROR HANDLING FOR SCRAPER WINDOW
         await scraperWindow.close();
         scraperWindow = createScraperWindow();
         return "OK";

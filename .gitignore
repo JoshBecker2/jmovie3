@@ -1,4 +1,6 @@
+.github/workflows/
 node_modules/
-out/
-.env
+downloads/
 .vscode
+.env
+out/

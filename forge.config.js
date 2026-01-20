@@ -3,6 +3,7 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
 module.exports = {
   packagerConfig: {
+    name: 'jmovie3',
     asar: true,
     extraResource: [
       "./lists"
@@ -12,22 +13,28 @@ module.exports = {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      platforms: ['win32'],
+      config: {
+        authors: "Josh Becker",
+        setupExe: 'jmovie3-install-oneclick.exe',
+        exe: 'jmovie3.exe',
+      },
     },
     {
       name: '@electron-forge/maker-zip',
-      platforms: ['darwin'],
-    },
-    {
-      name: "@electron-forge/maker-dmg",
-      config: {}
+      platforms: ['win32'],
+      config: {
+        authors: "Josh Becker"
+      }
     },
     {
       name: '@electron-forge/maker-deb',
+      platforms: ['deb'],
       config: {},
     },
     {
       name: '@electron-forge/maker-rpm',
+      platforms: ['rpm'],
       config: {},
     },
   ],

@@ -44,7 +44,7 @@ jobs:
         run: npm install
 
       - name: Build DMG for Apple ARM
-        run: npm run make -- --arch=arm --targets @electron-forge/maker-dmg
+        run: npm run make -- --arch=arm64 --targets @electron-forge/maker-dmg
 
       # - name: List files (Debug)
       #   run: ls -R out/

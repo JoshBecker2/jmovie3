@@ -7,10 +7,17 @@ module.exports = {
     asar: true,
     extraResource: [
       "./lists"
+    ],
+    ignore: [
+      "downloads/"
     ]
   },
   rebuildConfig: {},
   makers: [
+    {
+      name: "@glockx/electron-forge-maker-nsis",
+      platforms: ['win32']
+    },
     {
       name: '@electron-forge/maker-squirrel',
       platforms: ['win32'],
